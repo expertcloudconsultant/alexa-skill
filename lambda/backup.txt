@@ -1,0 +1,70 @@
+class BookAppointmentIntentHandler(AbstractRequestHandler):
+    def can_handle(self, handler_input):
+        return ask_utils.is_intent_name("BookAppointment")(handler_input)
+
+    def handle(self, handler_input):
+        patient = handler_input.request_envelope.request.intent.slots["patient"].value
+
+        # Load appointment data from a JSON file
+        with open("appointments.json", "r") as file:
+            appointments = json.load(file)
+
+        if patient in appointments:
+            schedule = appointments[patient]
+            speak_output = f"{patient}, your appointment is scheduled for {schedule}."
+        else:
+            speak_output = f"I do not have a record for {patient}'s schedule yet."
+
+        prompt = "<break time='0.75s'/>"
+        speak_output += prompt
+
+        return handler_input.response_builder.speak(speak_output).response
+
+class HelpIntentHandler(AbstractRequestHandler):
+    """Handler for Help Intent."""
+    def can_handle(self, handler_input):
+        # type: (HandlerInput) -> bool
+        return ask_utils.is_intent_name("AMAZON.HelpIntent")(handler_input)
+
+    def handle(self, handler_input):
+        # type: (HandlerInput) -> Response
+        speak_output = "You can say hello to me! How can I help?"
+
+        return (
+            handler_input.response_builder
+                .speak(speak_output)
+                .ask(speak_output)
+                .response
+        )
+        
+        
+        
+        
+        class BookAppointmentIntentHandler(AbstractRequestHandler):
+    def can_handle(self, handler_input):
+        return ask_utils.is_intent_name("BookAppointment")(handler_input)
+
+    def handle(self, handler_input):
+        patient = handler_input.request_envelope.request.intent.slots["patient"].value
+
+        # Connect to your MongoDB Atlas cluster
+        client = MongoClient("mongodb+srv://samueloppong:51UVyecsZ3sLCOPC@cluster0.52xfihh.mongodb.net/?retryWrites=true&w=majority")
+        db = client.get_database("appointmentsdb")
+        appointments_collection = db["patientschedule"]
+
+        # Query MongoDB for patient's appointment
+        appointment_data = appointments_collection.find_one({"patient": patient})
+
+        if appointment_data:
+            schedule = appointment_data["schedule"]
+            speak_output = f"{patient}, your appointment is scheduled for {schedule}."
+        else:
+            speak_output = f"I do not have a record for {patient}'s schedule yet."
+
+        prompt = "<break time='0.75s'/>"
+        speak_output += prompt
+
+        return handler_input.response_builder.speak(speak_output).response
+        
+        
+        

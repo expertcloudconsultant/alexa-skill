@@ -1,0 +1,101 @@
+{
+  "interactionModel": {
+    "dialog": {
+      "intents": [
+        {
+          "slots": [
+            {
+              "name": "patient",
+              "elicitationRequired": true,
+              "type": "AMAZON.FirstName",
+              "confirmationRequired": false,
+              "prompts": {
+                "elicitation": "Elicit.Slot.175974536853.266371747720"
+              }
+            }
+          ],
+          "name": "BookAppointment",
+          "confirmationRequired": false,
+          "prompts": {}
+        }
+      ],
+      "delegationStrategy": "ALWAYS"
+    },
+    "languageModel": {
+      "intents": [
+        {
+          "name": "AMAZON.CancelIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.HelpIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.StopIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.NavigateHomeIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.FallbackIntent",
+          "samples": []
+        },
+        {
+          "slots": [
+            {
+              "name": "patient",
+              "type": "AMAZON.FirstName"
+            }
+          ],
+          "name": "BookAppointment",
+          "samples": [
+            "{patient}",
+            "Check timeslot for {patient}",
+            "could you get me the appointment for {patient}",
+            "Can you book an appointment for {patient}",
+            "Arrange an appointment for {patient}",
+            "Book a time slot for {patient}",
+            "Set up a meeting with {patient}",
+            "I want to book an appointment for {patient}",
+            "Please schedule a patient named {patient} for an appointment",
+            "Could you help me arrange a consultation for {patient}",
+            "Book an appointment for {patient}",
+            "I need to set up an appointment for {patient}",
+            "Schedule an appointment for {patient}"
+          ]
+        }
+      ],
+      "types": [
+        {
+          "values": [
+            {
+              "name": {
+                "synonyms": [
+                  "emma walker",
+                  "john smith"
+                ],
+                "value": "name"
+              }
+            }
+          ],
+          "name": "patientName"
+        }
+      ],
+      "invocationName": "create appointment"
+    },
+    "prompts": [
+      {
+        "variations": [
+          {
+            "type": "PlainText",
+            "value": "Which {patient} appointment do you want to see?"
+          }
+        ],
+        "id": "Elicit.Slot.175974536853.266371747720"
+      }
+    ]
+  }
+}
