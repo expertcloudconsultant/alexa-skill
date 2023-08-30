@@ -4,6 +4,7 @@
 
 ![image](https://github.com/expertcloudconsultant/alexa-skill/assets/69172523/008c2bac-d157-4058-8c82-60d847cae2b3)
 
+![image](https://github.com/expertcloudconsultant/alexa-skill/assets/69172523/335df5ab-3804-4980-ad5d-2aeb6d4ed43b)
 
 ![image](https://github.com/expertcloudconsultant/alexa-skill/assets/69172523/6972d332-d460-473d-9b9b-371f9ae03267)
 
