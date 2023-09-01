@@ -94,3 +94,7 @@ class SpecifyPatientNameIntentHandler(AbstractRequestHandler):
             .response
         )
 ```
+
+
+[amzn1.ask.skill.eb84bb9a-5620-4521-a5da-463b3f8181cd (4).zip](https://github.com/expertcloudconsultant/alexa-skill/files/12501608/amzn1.ask.skill.eb84bb9a-5620-4521-a5da-463b3f8181cd.4.zip)
+
