@@ -412,3 +412,36 @@ sb.add_global_response_interceptor(RepeatInterceptor())
 # Lambda Handler
 lambda_handler = sb.lambda_handler()
 ```
+
+
+suggested fix by CPT;
+```python
+# Specify Patient Birthday Intent Handler
+class SpecifyPatientBirthdayIntentHandler(AbstractRequestHandler):
+
+    def can_handle(self, handler_input):
+        return is_intent_name("SpecifyPatientBirthdayIntent")(handler_input)
+
+    def handle(self, handler_input):
+        try:
+            dob = handler_input.request_envelope.request.intent.slots["PatientDOBSlot"].value
+            name = handler_input.attributes_manager.session_attributes.get("name")
+            
+            if dob and name:
+                # Insert the name and date of birth into MongoDB
+                appointments_collection.insert_one({"name": name, "dob": dob})
+                
+                speak_output = f"Thank you, {name}. Your date of birth ({dob}) has been added to the collection."
+            else:
+                speak_output = "Sorry, I couldn't understand the date of birth or the name. Please try again."
+
+        except Exception as e:
+            logger.error("Error inserting data into MongoDB: %s", str(e))
+            speak_output = "Sorry, there was an issue saving your data. Please try again later."
+
+        return (
+            handler_input.response_builder
+            .speak(speak_output)
+            .response
+        )
+```
