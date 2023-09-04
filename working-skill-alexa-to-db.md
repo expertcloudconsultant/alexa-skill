@@ -415,3 +415,44 @@ sb.add_global_response_interceptor(RepeatInterceptor())
 # Lambda Handler
 lambda_handler = sb.lambda_handler()
 ```
+
+
+
+
+Here are some sample utterances for each of your custom intents:
+
+1. **AddNewPatientIntent**
+   - "Add a new patient."
+   - "I want to add a new patient."
+   - "Add a patient to the database."
+
+2. **SpecifyPatientNameIntent**
+   - "The patient's name is {PatientNameSlot}."
+   - "I'd like to specify the patient's name as {PatientNameSlot}."
+
+3. **SpecifyPatientBirthdayIntent**
+   - "The patient was born on {day} {month} {year}."
+   - "Set the patient's birthdate to {day} {month} {year}."
+
+4. **HandleNotInDatabaseIntent**
+   - "The patient's name is not in the database."
+   - "I couldn't find the patient's name in the database."
+   - "No patient with that name exists in the records."
+
+5. **CheckPatientBirthdayIntent**
+   - "What is the birthday of {PatientFirstNameSlot}?"
+   - "Tell me the birthdate for {PatientFirstNameSlot}."
+
+6. **NextPatientBirthdayIntent**
+   - "When is the next patient's birthday?"
+   - "Who has the closest upcoming birthday?"
+
+7. **DeleteAllPatientBirthdaysIntent**
+   - "Delete all patient birthdays."
+   - "Clear the entire database."
+
+8. **DeleteSpecificPatientBirthdayIntent**
+   - "Delete the birthday for {DeletePatientNameSlot}."
+   - "Remove {DeletePatientNameSlot}'s birthday from the records."
+
+Feel free to customize these sample utterances further to match the expected user inputs for your skill.
