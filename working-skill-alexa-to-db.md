@@ -456,3 +456,51 @@ Here are some sample utterances for each of your custom intents:
    - "Remove {DeletePatientNameSlot}'s birthday from the records."
 
 Feel free to customize these sample utterances further to match the expected user inputs for your skill.
+
+
+
+To enable slot filling in your Alexa skill, you can follow these steps and examples for your specific intents. Slot filling allows Alexa to prompt the user for missing slot values when necessary.
+
+1. **AddNewPatientIntent**: For the "AddNewPatientIntent," you can add slots for the patient's first name, day of birth, month of birth, and year of birth.
+
+   - PatientFirstNameSlot (required): This slot should capture the patient's first name.
+   - day (required): Slot for the day of birth.
+   - month (required): Slot for the month of birth.
+   - year (required): Slot for the year of birth.
+
+   Sample Utterances:
+   - "Add a new patient named {PatientFirstNameSlot}."
+   - "I want to add a new patient named {PatientFirstNameSlot} born on {day} {month} {year}."
+
+2. **SpecifyPatientNameIntent**: No additional slot is needed for this intent since it only captures the patient's first name.
+
+   Sample Utterances:
+   - "The patient's name is {PatientNameSlot}."
+
+3. **SpecifyPatientBirthdayIntent**: For the "SpecifyPatientBirthdayIntent," you can add slots for the day, month, and year of birth.
+
+   - day (required): Slot for the day of birth.
+   - month (required): Slot for the month of birth.
+   - year (required): Slot for the year of birth.
+
+   Sample Utterances:
+   - "The patient was born on {day} {month} {year}."
+   - "Set the patient's birthdate to {day} {month} {year}."
+
+4. **CheckPatientBirthdayIntent**: You can add a slot for the patient's first name to specify which patient's birthday to check.
+
+   - PatientFirstNameSlot (required): Slot for the patient's first name.
+
+   Sample Utterances:
+   - "What is the birthday of {PatientFirstNameSlot}?"
+   - "Tell me the birthdate for {PatientFirstNameSlot}."
+
+5. **DeleteSpecificPatientBirthdayIntent**: You can add a slot for the patient's name to specify which patient's birthday to delete.
+
+   - DeletePatientNameSlot (required): Slot for the patient's name.
+
+   Sample Utterances:
+   - "Delete the birthday for {DeletePatientNameSlot}."
+   - "Remove {DeletePatientNameSlot}'s birthday from the records."
+
+By configuring these slots and their types in your Alexa skill's interaction model, Alexa will automatically prompt the user for missing slot values when the user's request is incomplete. Ensure that you also provide appropriate prompts for each slot to guide the user in providing the required information.
