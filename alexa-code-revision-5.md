@@ -445,3 +445,41 @@ class SpecifyPatientBirthdayIntentHandler(AbstractRequestHandler):
             .response
         )
 ```
+
+
+
+To reveal what is stored in the session, you can include a line in the response to inform the user about the stored information. Here's the updated code with the additional line to reveal the content stored in the session:
+
+```python
+# Specify Patient Name Intent Handler
+class SpecifyPatientNameIntentHandler(AbstractRequestHandler):
+    
+    def can_handle(self, handler_input):
+        return is_intent_name("SpecifyPatientNameIntent")(handler_input)
+
+    def handle(self, handler_input):
+        try:
+            name = handler_input.request_envelope.request.intent.slots["PatientNameSlot"].value
+
+            # Store the name in the session
+            handler_input.attributes_manager.session_attributes["name"] = name
+
+            speak_output = f"Thank you, {name}. Your name has been stored in the session. You can now specify your date of birth."
+            # Include a line to reveal what is stored in the session
+            speak_output += f" Just to confirm, your name in the session is {name}."
+
+        except Exception as e:
+            logger.error("Error storing name in session: %s", str(e))
+            speak_output = "Sorry, there was an issue storing your name. Please try again later."
+
+        return (
+            handler_input.response_builder
+            .speak(speak_output)
+            .response
+        )
+```
+
+Now, when the user provides their name, the response will include a confirmation that their name has been stored in the session. You can adjust the wording as needed for your skill's conversational flow.
+
+
+
