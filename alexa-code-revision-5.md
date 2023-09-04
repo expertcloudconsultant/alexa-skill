@@ -611,3 +611,57 @@ class SpecifyPatientDOBIntentHandler(AbstractRequestHandler):
 
 Now, the day, month, and year are stored in the session attributes, making them available for future use if needed.
 
+
+
+
+To have the `SpecifyPatientBirthdayIntentHandler` perform an ask() to prompt the user to specify the date of birth when necessary, you can follow these steps:
+
+1. Check if the date of birth slots (day, month, year) are filled in the request.
+2. If the date of birth slots are not filled, use the ask() method to prompt the user to specify the date of birth.
+3. If the date of birth slots are filled and the first name is also available, proceed with inserting the data into MongoDB.
+
+Here's how you can modify the handler to include the ask() prompt:
+
+```python
+# Specify Patient Birthday Intent Handler
+class SpecifyPatientBirthdayIntentHandler(AbstractRequestHandler):
+
+    def can_handle(self, handler_input):
+        return is_intent_name("SpecifyPatientBirthdayIntent")(handler_input)
+
+    def handle(self, handler_input):
+        try:
+            day = handler_input.request_envelope.request.intent.slots["day"].value
+            month = handler_input.request_envelope.request.intent.slots["month"].value
+            year = handler_input.request_envelope.request.intent.slots["year"].value
+
+            date_of_birth = f"{day}-{month}-{year}"
+
+            first_name = handler_input.attributes_manager.session_attributes.get("first_name")
+
+            if day and month and year:
+                if first_name:
+                    # Insert the first name and date of birth into MongoDB
+                    appointments_collection.insert_one({"first_name": first_name, "date_of_birth": date_of_birth})
+                    
+                    speak_output = f"Thank you, {first_name}. Your date of birth ({date_of_birth}) has been added to the collection."
+                else:
+                    speak_output = "Sorry, I couldn't find your first name in the session. Please specify your first name first."
+            else:
+                # Date of birth slots are not filled, ask the user to specify them
+                handler_input.response_builder.speak("I didn't catch your date of birth. Can you please specify it?").ask("Please tell me your date of birth, including the day, month, and year.")
+                return handler_input.response_builder.response
+
+        except Exception as e:
+            logger.error("Error inserting data into MongoDB: %s", str(e))
+            speak_output = "Sorry, there was an issue saving your data. Please try again later."
+
+        return (
+            handler_input.response_builder
+            .speak(speak_output)
+            .response
+        )
+```
+
+With this modification, the handler will ask the user to specify the date of birth if the date of birth slots are not filled, allowing for a more interactive conversation.
+
