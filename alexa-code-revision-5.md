@@ -522,3 +522,44 @@ class SpecifyPatientBirthdayIntentHandler(AbstractRequestHandler):
 
 With this modification, the handler first checks if the name is stored in the session. If the name is found, it proceeds to check for the DOB. If both the name and DOB are present, it inserts the data into MongoDB. If the name is present but the DOB is missing, it prompts the user for the DOB. If the name is not found in the session, it informs the user to specify their name first.
 
+
+To store the day, month, and year as a single date_of_birth value in the `SpecifyPatientDOBIntentHandler`, you can modify the code as follows:
+
+```python
+# Specify Patient Date of Birth Intent Handler
+class SpecifyPatientDOBIntentHandler(AbstractRequestHandler):
+
+    def can_handle(self, handler_input):
+        return is_intent_name("SpecifyPatientDOBIntent")(handler_input)
+
+    def handle(self, handler_input):
+        try:
+            day = handler_input.request_envelope.request.intent.slots["day"].value
+            month = handler_input.request_envelope.request.intent.slots["month"].value
+            year = handler_input.request_envelope.request.intent.slots["year"].value
+
+            date_of_birth = f"{day}-{month}-{year}"
+
+            first_name = handler_input.attributes_manager.session_attributes.get("first_name")
+
+            if first_name:
+                # Insert the first name and date of birth into MongoDB
+                appointments_collection.insert_one({"first_name": first_name, "date_of_birth": date_of_birth})
+                
+                speak_output = f"Thank you, {first_name}. Your date of birth ({date_of_birth}) has been added to the collection."
+            else:
+                speak_output = "Sorry, I couldn't find your first name in the session. Please specify your first name first."
+
+        except Exception as e:
+            logger.error("Error inserting data into MongoDB: %s", str(e))
+            speak_output = "Sorry, there was an issue saving your data. Please try again later."
+
+        return (
+            handler_input.response_builder
+            .speak(speak_output)
+            .response
+        )
+```
+
+In this updated code, we retrieve the day, month, and year separately from the slots, concatenate them to form the `date_of_birth` string, and then insert it into MongoDB along with the first name. This code should work to store the date of birth as a single value in the desired format.
+
