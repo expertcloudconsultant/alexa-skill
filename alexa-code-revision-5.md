@@ -563,3 +563,51 @@ class SpecifyPatientDOBIntentHandler(AbstractRequestHandler):
 
 In this updated code, we retrieve the day, month, and year separately from the slots, concatenate them to form the `date_of_birth` string, and then insert it into MongoDB along with the first name. This code should work to store the date of birth as a single value in the desired format.
 
+
+In the code I provided, the day, month, and year values are not explicitly stored in the session. Instead, they are retrieved directly from the request slots and then immediately used to construct the `date_of_birth` variable. Once the `date_of_birth` variable is constructed, it is used within the handler but is not stored in the session.
+
+If you want to store the day, month, and year values in the session for future use or reference, you would need to explicitly set them in the session attributes dictionary. Here's how you can do that:
+
+```python
+# Specify Patient Date of Birth Intent Handler
+class SpecifyPatientDOBIntentHandler(AbstractRequestHandler):
+
+    def can_handle(self, handler_input):
+        return is_intent_name("SpecifyPatientDOBIntent")(handler_input)
+
+    def handle(self, handler_input):
+        try:
+            day = handler_input.request_envelope.request.intent.slots["day"].value
+            month = handler_input.request_envelope.request.intent.slots["month"].value
+            year = handler_input.request_envelope.request.intent.slots["year"].value
+
+            date_of_birth = f"{day}-{month}-{year}"
+
+            # Store the day, month, and year in the session
+            handler_input.attributes_manager.session_attributes["day"] = day
+            handler_input.attributes_manager.session_attributes["month"] = month
+            handler_input.attributes_manager.session_attributes["year"] = year
+
+            first_name = handler_input.attributes_manager.session_attributes.get("first_name")
+
+            if first_name:
+                # Insert the first name and date of birth into MongoDB
+                appointments_collection.insert_one({"first_name": first_name, "date_of_birth": date_of_birth})
+                
+                speak_output = f"Thank you, {first_name}. Your date of birth ({date_of_birth}) has been added to the collection."
+            else:
+                speak_output = "Sorry, I couldn't find your first name in the session. Please specify your first name first."
+
+        except Exception as e:
+            logger.error("Error inserting data into MongoDB: %s", str(e))
+            speak_output = "Sorry, there was an issue saving your data. Please try again later."
+
+        return (
+            handler_input.response_builder
+            .speak(speak_output)
+            .response
+        )
+```
+
+Now, the day, month, and year are stored in the session attributes, making them available for future use if needed.
+
