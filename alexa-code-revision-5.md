@@ -483,3 +483,42 @@ Now, when the user provides their name, the response will include a confirmation
 
 
 
+
+To read what is stored in the previous intent's session before storing the date of birth (DOB), you can modify the `SpecifyPatientBirthdayIntentHandler` as follows:
+
+```python
+# Specify Patient Birthday Intent Handler
+class SpecifyPatientBirthdayIntentHandler(AbstractRequestHandler):
+
+    def can_handle(self, handler_input):
+        return is_intent_name("SpecifyPatientBirthdayIntent")(handler_input)
+
+    def handle(self, handler_input):
+        try:
+            dob = handler_input.request_envelope.request.intent.slots["PatientDOBSlot"].value
+            name = handler_input.attributes_manager.session_attributes.get("name")
+
+            if name:
+                if dob:
+                    # Insert the name and date of birth into MongoDB
+                    appointments_collection.insert_one({"name": name, "dob": dob})
+                    
+                    speak_output = f"Thank you, {name}. Your date of birth ({dob}) has been added to the collection."
+                else:
+                    speak_output = f"Sorry, I couldn't understand your date of birth. Please provide it."
+            else:
+                speak_output = "Sorry, I couldn't find your name in the session. Please specify your name first."
+
+        except Exception as e:
+            logger.error("Error inserting data into MongoDB: %s", str(e))
+            speak_output = "Sorry, there was an issue saving your data. Please try again later."
+
+        return (
+            handler_input.response_builder
+            .speak(speak_output)
+            .response
+        )
+```
+
+With this modification, the handler first checks if the name is stored in the session. If the name is found, it proceeds to check for the DOB. If both the name and DOB are present, it inserts the data into MongoDB. If the name is present but the DOB is missing, it prompts the user for the DOB. If the name is not found in the session, it informs the user to specify their name first.
+
