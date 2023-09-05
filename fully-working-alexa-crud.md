@@ -431,3 +431,12 @@ sb.add_global_response_interceptor(RepeatInterceptor())
 lambda_handler = sb.lambda_handler()
 
 ```
+
+
+
+![image](https://github.com/expertcloudconsultant/alexa-skill/assets/69172523/37fe054d-9b33-4cb0-9a2b-e39e1b31fccb)
+
+
+![dbs-create](https://github.com/expertcloudconsultant/alexa-skill/assets/69172523/c3cc7c04-7ead-4054-a00b-df767490b709)
+
+
