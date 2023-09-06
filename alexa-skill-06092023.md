@@ -507,7 +507,7 @@ lambda_handler = sb.lambda_handler()
 
 
 
-List All Patients in the Database
+**List All Patients in the Database**
 ```python
  # List All Patients and their date of births
  # Who are the patients in the system
