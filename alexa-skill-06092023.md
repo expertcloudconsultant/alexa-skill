@@ -504,3 +504,49 @@ sb.add_global_response_interceptor(RepeatInterceptor())
 # Lambda Handler
 lambda_handler = sb.lambda_handler()
 ```
+
+
+
+List All Patients in the Database
+```python
+ # List All Patients and their date of births
+ # Who are the patients in the system
+class ListAllPatientsIntentHandler(AbstractRequestHandler):
+
+    def can_handle(self, handler_input):
+        return is_intent_name("ListAllPatientsIntent")(handler_input)
+
+    def handle(self, handler_input):
+        try:
+            # Query the database to retrieve all patient data including first_name and date_of_birth
+            all_patients_data = appointments_collection.find({}, {"first_name": 1, "date_of_birth": 1})
+
+            if all_patients_data:
+                patients_list = ""
+                for patient_data in all_patients_data:
+                    first_name = patient_data.get("first_name")
+                    date_of_birth = patient_data.get("date_of_birth")
+
+                    if first_name and date_of_birth:
+                        patients_list += f"{first_name} was born on {date_of_birth}. "
+
+                if patients_list:
+                    speak_output = f"The list of all patients in the database includes: {patients_list}"
+                else:
+                    speak_output = "The database is empty. There are no patients listed."
+
+            else:
+                speak_output = "The database is empty. There are no patients listed."
+
+        except Exception as e:
+            logger.error("Error querying the database: %s", str(e))
+            speak_output = "Sorry, there was an issue retrieving the patient list. Please try again later."
+
+        return (
+            handler_input.response_builder
+            .speak(speak_output)
+            .response
+        )
+
+
+```
